@@ -26,20 +26,20 @@ const {
 
 const getCandidatesData = async (req, res) => {
   try {
-    let query = req.body.profiles; 
-    let pageNumber=req.body.pageNumber;
-    let str = ""; //{[...]}
-    for (let key in query) {
-      if (query[key] != "" && key!=="Experience_in_Years" && key!=="Current_Timezone") {
-        str += `(${key.trim()}:contains:${query[key].trim()})and`;
-      } else if ((key === "Experience_in_Years" || key==="Current_Timezone") && query[key] != "") {
-        str += `(${key.trim()}:equals:${query[key].trim()})and`;
-      }
-    }
-    query = str.substring(0,str.length-3);
+    let query = req.body.profiles.Skill_Set; 
+    console.log(req.body);
+    query=query.replace(/"/g,'');
+    query=query.trim();
+    req.body.profiles.Skill_Set=query;
+    query=query.replace(/ and /ig,' & ');
+    query=query.replace(/ or /ig,' | ');
+    query="("+query+")";
     console.log(query);
-    const url = `${API_URL_SEARCH}?criteria=${encodeURIComponent(query)}`;
-    const successResponse = await getCandidatesZoho(res, url, pageNumber); 
+    let flag=true;
+    if(query.includes('&') || query.includes("|")){
+        flag=false;
+    }
+    const successResponse = await getCandidatesZoho(res, query,req.body,flag); 
     return successResponse;
   } catch (error) {
     return errorResponse({ res, error });
@@ -106,6 +106,7 @@ const getcandidateSearchBarData = async (req, res) => {
     const data = req.body;
     const searcH1 = `(Skill_Set:starts_with:${data.search})`;
     const url = `${API_URL_SEARCH}?criteria=${encodeURIComponent(searcH1)}`;
+    console.log(url);
     const successResponse = await getCandidatesSearchBarZoho(res, url);
     return successResponse;
   } catch (error) {

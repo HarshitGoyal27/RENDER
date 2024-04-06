@@ -5,7 +5,7 @@ const {
 } = require("../utils/response/response.handler");
 const axios = require("axios");
 const { getAccessToken } = require("../accessToken");
-
+const {generateQuery}=require("./searchFunction.js");
 const removeDuplicates=(data)=>{
   const set=new Set();
   const arr=[]
@@ -13,7 +13,7 @@ const removeDuplicates=(data)=>{
     let temp=ele.toLowerCase();
     ele=ele.replace(ele.charAt(0),ele.charAt(0).toUpperCase()).trim();
     if(!set.has(temp)){
-      set.add(ele);
+      set.add(temp);
       arr.push(ele);
     }
   });
@@ -78,33 +78,16 @@ const getScore=({data})=>{
   return months_exp;
 }
 
-const getCandidatesZoho = async (res, url, pageNumber) => {
+const getCandidatesZoho = async (res, query, {profiles},flag) => {
   try {
-    const accessToken = getAccessToken();
-    console.log(url);
-    const candidates = await axios.get(url, {
-      headers: {
-        Authorization: `Zoho-oauthtoken ${accessToken}`,
-      },
-      params: {
-        per_page: 5,
-        page: pageNumber,
-      },
+    console.log('aaaa',query,profiles);
+    const candidatesData = await generateQuery(query,profiles,flag);
+    console.log('candidatesData:->',candidatesData.length);
+    return successResponse({
+      res,
+      data: { candidatesData },
+      message: "Success",
     });
-    if (candidates.data != "") {
-      const candidatesData = getRequiredFields(candidates.data);
-      return successResponse({
-        res,
-        data: { candidatesData },
-        message: "Success",
-      });
-    } else {
-      return successResponse({
-        res,
-        data: { candidatesData: "Data not present" },
-        message: "Success",
-      });
-    }
   } catch (error) {
     return errorResponse({ res, error });
   }
@@ -139,7 +122,7 @@ const getCandidateZoho = async (res, url1, url2) => {
     } else {
       return successResponse({
         res,
-        data: { candidatesData: "Data not present" },
+        data: { candidatesData:[] },
         message: "Success",
       });
     }
@@ -213,12 +196,13 @@ const getSortedCandidateZoho = async (url) => {
 const addCandidatesZoho = async (res, data, url) => {
   try {
     const accessToken = getAccessToken();
+    console.log('Reached 3');
     let candidatesidresp = await axios.post(url, data, {
       headers: {
         Authorization: `Zoho-oauthtoken ${accessToken}`,
       },
     });
-    console.log(candidatesidresp);
+    console.log(candidatesidresp.data.data);
     return successResponse({
       res,
       data: "Candidates added Succesfully",
@@ -426,6 +410,7 @@ const getLinkedinZoho=async(res,link)=>{
   }
 }
 
+
 module.exports = {
   getCandidatesZoho,
   getCandidateZoho,
@@ -442,3 +427,4 @@ module.exports = {
   getCertificationZoho,
   getLinkedinZoho
 };
+

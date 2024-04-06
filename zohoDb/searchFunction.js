@@ -62,11 +62,7 @@ let findRelevantFields = (C_data, profiles) => {
   console.log('find relevat fields');
   for (let i = 0; i < C_data.length; i++) {
     let ele = C_data[i];
-    if (
-      (ele.Previosus_Role || ele.Current_Role) &&
-      ele.Current_Location &&
-      ele.Current_Salary
-    ) {
+    if ((ele.Previosus_Role || ele.Current_Role) && ele.Current_Location && ele.Current_Salary) {
       let obj = {
         Name: ele.Full_Name,
         Email: ele.Email,
@@ -79,6 +75,7 @@ let findRelevantFields = (C_data, profiles) => {
         Salary: ele.Current_Salary,
         CurrentLocation: ele.Current_Location,
         MayAlsoKnow: ele.Additional_Skills,
+        Education: ele.Highest_Qualification
       };
       if (profiles.minExp && profiles.maxExp && obj.Experience >= profiles.minExp && obj.Experience <= profiles.maxExp) {
         arr.push(obj);

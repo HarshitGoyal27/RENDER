@@ -27,21 +27,17 @@ const {
 const getCandidatesData = async (req, res) => {
   try {
     let query = req.body.profiles.Skill_Set; 
-    console.log(req.body);
-    query=query.replace(/"/g,'');
-    query=query.trim();
-    req.body.profiles.Skill_Set=query;
+    console.log('hellllooo',req.body,query);
+    query=query.replace(/\"/g,'');
     query=query.replace(/ and /ig,' & ');
     query=query.replace(/ or /ig,' | ');
-    query="("+query+")";
     console.log(query);
-    let flag=true;
-    if(query.includes('&') || query.includes("|")){
-        flag=false;
-    }
-    const successResponse = await getCandidatesZoho(res, query,req.body,flag); 
+    query=query.trim();
+    console.log('hhhhhhhh')
+    const successResponse = await getCandidatesZoho(res, query,req.body); 
     return successResponse;
   } catch (error) {
+    console.log('abcdefgh',error)
     return errorResponse({ res, error });
   }
 };

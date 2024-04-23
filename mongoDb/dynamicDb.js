@@ -5,7 +5,7 @@ const {
 } = require("../utils/response/response.handler");
 const axios = require("axios");
 const {getSharedObj} = require('../shared.js');
-const {skill}=require("../chatgpt.js");
+const {skill}=require("../chatgpt1.js");
 const {parsePage}=require("../DynamicPages/parsepages.js")
 const getDeveloperDb=async(res,search_word)=>{
     let flag=true;

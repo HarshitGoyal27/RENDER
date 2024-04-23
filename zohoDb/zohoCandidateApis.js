@@ -78,10 +78,10 @@ const getScore=({data})=>{
   return months_exp;
 }
 
-const getCandidatesZoho = async (res, query, {profiles},flag) => {
+const getCandidatesZoho = async (res, query, {profiles}) => {
   try {
     console.log('aaaa',query,profiles);
-    const candidatesData = await generateQuery(query,profiles,flag);
+    const candidatesData = await generateQuery(query,profiles);
     console.log('candidatesData:->',candidatesData.length);
     return successResponse({
       res,

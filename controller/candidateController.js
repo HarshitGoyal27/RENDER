@@ -22,6 +22,7 @@ const getCandidatesBySearch = async (req, res) => {
 //this function
 const getCandidates = async (req, res) => {
   try {
+    console.log('Services fn',req.body);
     const successResponse = await candidateService.getCandidatesData(req, res);
     return successResponse;
   } catch (error) {
@@ -138,6 +139,16 @@ const getLinkedin=async(req,res)=>{
   }
 }
 
+const getCandidateSAP = async (req, res) => {
+  console.log('aaaa')
+  try {
+    const successResponse = await candidateService.getLinkedinData(req, res);
+    return successResponse;
+  } catch (err) {
+    return errorResponse({ res, err });
+  }
+};
+
 module.exports = {
   getCandidate,
   getCandidatesBySearch,
@@ -152,5 +163,6 @@ module.exports = {
   addCandidates,
   getTotalCount,
   getSCLCandidtates,
-  getCertification
+  getCertification,
+  getCandidateSAP
 };

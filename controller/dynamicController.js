@@ -13,4 +13,14 @@ const getDevelopers=async(req,res)=>{
     }
 }
 
-module.exports={getDevelopers};
+const getConsultant=async(req,res)=>{
+    try{
+        console.log('hi')
+        const successResponse=await dynamicService.getConsultantdata(req,res);
+        return successResponse;
+    }catch(error){
+        return errorResponse({res,error});
+    }
+}
+
+module.exports={getDevelopers,getConsultant};

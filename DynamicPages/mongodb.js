@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 const uri = "mongodb+srv://romanmania619:t3NGtHxKNBTLn38c@cluster0.l5mueji.mongodb.net/Skills-Capital?retryWrites=true&w=majority";
 const axios=require('axios');
 const fs=require('fs');
-let {parsePage}=require('./parsepages.js');//convert to json
+let {parsePage}=require('./parsepages1.js');//convert to json
 let data=parsePage();
 //console.log('This is data:',data);
 mongoose.connect(uri).then(()=>{

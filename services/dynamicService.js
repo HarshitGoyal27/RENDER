@@ -3,7 +3,7 @@ const {
     errorResponse,
 } = require('../utils/response/response.handler');
 const {API_CLIENT}=require('../utils/constants/constants.js');
-const {getDeveloperDb}=require('../mongoDb/dynamicDb.js');
+const {getDeveloperDb,getConsultantDb}=require('../mongoDb/dynamicDb.js');
 
 const getDeveloperdata=async(req,res)=>{
     try{
@@ -16,5 +16,16 @@ const getDeveloperdata=async(req,res)=>{
     }
 }
 
+const getConsultantdata=async(req,res)=>{
+    try{
+        console.log(req.params.skill);//it should be (Skill)-developer from front end
+        const search_word=req.params.skill;
+        const successResponse=await getConsultantDb(res,search_word);
+        return successResponse;
+    }catch(err){
+        return errorResponse({res,err});
+    }
+}
 
-module.exports={getDeveloperdata}
+
+module.exports={getDeveloperdata,getConsultantdata}

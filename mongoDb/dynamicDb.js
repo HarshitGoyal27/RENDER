@@ -6,7 +6,8 @@ const {
 const axios = require("axios");
 const {getSharedObj} = require('../shared.js');
 const {skill}=require("../chatgpt1.js");
-const {parsePage}=require("../DynamicPages/parsepages.js")
+const {skill2}=require("../chatgpt2.js");
+const {parsePage}=require("../DynamicPages/parsepages1.js")
 const getDeveloperDb=async(res,search_word)=>{
     let flag=true;
     let dataToMongoDb;
@@ -41,5 +42,21 @@ const getDeveloperDb=async(res,search_word)=>{
     }
 }
 
+const getConsultantDb=async(res,search_word)=>{
+    try{
+        console.log(search_word);
+        let data=await skill2(search_word); 
+        console.log(data);
+        if(data)
+            return successResponse({res, data:data, message: "Success" });
+        else
+            throw 'Error in parsee pageee';
+        
+    }catch(err){
+        console.log(err);
+        return errorResponse({res,err});
+    }
+}
 
-module.exports={getDeveloperDb};
+
+module.exports={getDeveloperDb,getConsultantDb};

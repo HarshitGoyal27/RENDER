@@ -46,9 +46,12 @@ const getConsultantDb=async(res,search_word)=>{
     try{
         console.log(search_word);
         let data=await skill2(search_word); 
-        console.log(data);
+        let consulting=data.slice(0,3);
+        let insights=data.slice(3);
+        let obj={consulting,insights};
+        console.log(obj);
         if(data)
-            return successResponse({res, data:data, message: "Success" });
+            return successResponse({res, data:obj, message: "Success" });
         else
             throw 'Error in parsee pageee';
         

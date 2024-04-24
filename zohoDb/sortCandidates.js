@@ -121,7 +121,6 @@ let sortedCandidates=(candidates,obj)=>{
             add(candidates[i]);
         }
         
-
         for(let i=0;i<candidates.length;i++){
             ans.push(remove());
         }

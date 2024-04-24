@@ -129,7 +129,7 @@ const getSAPZoho = async (req, res, urls) => {
       const unique=removeDuplicates(sorted);
       console.log('SAP CANDIDATES:->',unique.length);
       finalCandidates=unique;
-      console.log(finalCandidates[0]);
+      console.log(finalCandidates);
       return successResponse({
         res,
         data: { finalCandidates },

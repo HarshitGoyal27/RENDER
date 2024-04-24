@@ -22,16 +22,19 @@ const options = {
 };
 const skill2=(skill)=>{
     return new Promise(async(resolve,reject)=>{
-      const job_advertisement=`write ${skill} TRANSFORMATION CONSULTING CAPABILITIES in 3 points \n`
-      const arr=[job_advertisement];
+      const job_advertisement=`write ${skill} TRANSFORMATION CONSULTING CAPABILITIES in 3 points and give headline for each point too \n`;
+      const job_insights=`write FEATURED INSIGHTS for ${skill} in 4 points and give headline for each point too`;
+      const arr=[job_advertisement,job_insights];
       const str=arr.join('');
       options.data.text=`${str}`;
       try{
         const response=await axios.request(options);
-        let data=response.data.google.generated_text.replace(/\*/g, '').replace(/:/g, '').trim() + '\n\n';
-        const regex = /^\d+\.\s*(.*)$/gm;
-        data=data.match(regex);
-        resolve(data);
+        let data=response.data.google.generated_text.replace(/\*/g, '').replace(/:/g, '').replace(/-/g,'').trim() + '\n\n';
+        const regex = /^Headline\s*[\d]+\s*(.*)$\s*([\s\S]*?)(?=\n\n|$)/gm;
+        let matches = Array.from(data.matchAll(regex), m => [m[1].trim(), m[2].trim()]);
+        fs.writeFileSync("./eg.txt",data);
+        console.log(matches);
+        resolve(matches);
       }catch(err){
         reject('Error in fetching data using openai');
       }

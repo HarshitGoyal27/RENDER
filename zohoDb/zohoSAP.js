@@ -12,10 +12,12 @@ const findRelevantFields = (C_data) => {
       for (let i = 0; i < C_data.length; i++) {
         let ele = C_data[i];
         if ((ele.Previous_Role || ele.Current_Role) && ele.Current_Location && ele.Current_Salary && ele.Skill_Set) {
+          let parse_Skill_Set=ele.Skill_Set.split(",").map((str)=>{str=str.trim();str=" "+str+" ";return str;})
+          let final_Skill_Set=parse_Skill_Set.join(",").trim();
           let obj = {
             Name: ele.Full_Name,
             Email: ele.Email,
-            Skills: ele.Skill_Set,
+            Skills: final_Skill_Set,
             id: ele.id,
             Experience: ele.Experience_in_Years,
             PreviousRole: ele.Previous_Role,
@@ -97,11 +99,11 @@ const filterCandidates=(candidates, obj)=>{
 const removeDuplicates=(candidates)=>{
     let set=new Set();
     let uniqueCandidates=[];
+    console.log('****');
     candidates.forEach((ele)=>{
         let str=JSON.stringify(ele);
         if(set.has(str)){
             //nothing to do
-            console.log(ele.Name);
         }else{
             set.add(str);
             uniqueCandidates.push(ele);
@@ -113,23 +115,34 @@ const removeDuplicates=(candidates)=>{
 const getSAPZoho = async (req, res, urls) => {
     try {
       let pageNumber=req.body.pageNoAxios;
-      console.log('hellllooo',req.body.profiles);
+
       const responses = await Promise.all(urls.map(url => fetchData(url,pageNumber)));
-      console.log(responses.length);
+
       let finalArray=[];
       responses.forEach((arr)=>{
-        finalArray.push(...arr);
+        if(arr){
+            finalArray.push(...arr);
+        }
+        else{
+          console.log("Error encountered");
+        }
       });
+
       console.log('Total Candidates fetched is:',finalArray.length);
+
       const candidatesRelevantFields=findRelevantFields(finalArray);
       console.log('Total Candidates after relevant fields:=>',candidatesRelevantFields.length);
-      let finalCandidates=filterCandidates(candidatesRelevantFields,req.body.profiles);
-      console.log('Total Candidates after All the fields:=>',finalCandidates.length);
-      const sorted=sortedCandidates(finalCandidates,req.body.profiles);
-      const unique=removeDuplicates(sorted);
-      console.log('SAP CANDIDATES:->',unique.length);
-      finalCandidates=unique;
-      console.log(finalCandidates);
+
+      let filteredCandidates=filterCandidates(candidatesRelevantFields,req.body.profiles);
+      console.log('Total Candidates after All the fields:=>',filteredCandidates.length);
+
+      const unique=removeDuplicates(filteredCandidates);
+
+      const sorted=sortedCandidates(unique,req.body.profiles,[],[]);
+
+      let finalCandidates=sorted;
+      console.log('SAP CANDIDATES:->',finalCandidates.length);
+
       return successResponse({
         res,
         data: { finalCandidates },

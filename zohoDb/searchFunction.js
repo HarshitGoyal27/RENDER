@@ -9,7 +9,6 @@ const { getAccessToken } = require("../accessToken");
 let findRelevantFields = (C_data,profiles) => {
   try{
     let arr = [];
-    console.log('********',profiles);
     for (let i = 0; i < C_data.length; i++) {
       let ele = C_data[i];
       if ((ele.Previosus_Role || ele.Current_Role) && ele.Current_Location && ele.Current_Salary) {
@@ -100,7 +99,6 @@ async function getCandidatesForExpression(expression,profiles) {
   }
   word=word.trim();
   word.length>0 && skill_stack.push(word);
-  console.log(skill_stack);
   for(let i=0;i<skill_stack.length;i++){
       let skill=`temp.includes(\"${skill_stack[i]}\")`;
       expression=expression.replace(`${skill_stack[i]}`,skill)

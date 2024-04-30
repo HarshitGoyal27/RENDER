@@ -185,8 +185,15 @@ let sortedCandidates=(candidates,obj,arr,ans)=>{
                         //return false;
                     }
                     else{
+                        //check for other skills
+                        if(diffSkill_cr_1===false && diffSkill_cr_2===true){
+                            return true;
+                        }
+                        else if(diffSkill_cr_1===true && diffSkill_cr_2===false){
+                            return false;
+                        }
                         //check for previous role
-                        if(pr_1_idx !=-1 &&  pr_2_idx!=-1){
+                        else if(pr_1_idx !=-1 &&  pr_2_idx!=-1){
                             if(pr_1_idx < pr_2_idx){
                                 return true;
                             }else if(pr_1_idx > pr_2_idx){
@@ -397,8 +404,14 @@ let sortedCandidates=(candidates,obj,arr,ans)=>{
                         //return false;
                     }
                     else{
+                        if(diffSkill_cr_1===false && diffSkill_cr_2===true){
+                            return true;
+                        }
+                        else if(diffSkill_cr_1===true && diffSkill_cr_2===false){
+                            return false;
+                        }
                         //check for previous role
-                        if(pr_1_idx !=-1 &&  pr_2_idx!=-1){
+                        else if(pr_1_idx !=-1 &&  pr_2_idx!=-1){
                             if(pr_1_idx < pr_2_idx){
                                 return true;
                             }else if(pr_1_idx > pr_2_idx){

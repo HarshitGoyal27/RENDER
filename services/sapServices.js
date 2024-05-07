@@ -16,8 +16,8 @@ const getSAPData=async(req,res)=>{
         let primary=req.body.profiles.primary_module;
         let secondary=req.body.profiles.secondary_module;
         let query1=`(Current_Role:contains:${keyword})or(Previous_Role:contains:${keyword})or(Skill_Set:contains:${keyword})or(Candidate_Profile:contains:${keyword})or(Additional_Skills:contains:${keyword})`;
-        let query2=`(Skill_Set:contains:${primary})or(Additional_Skills:contains:${primary})`;
-        let query3=`(Current_Role:contains:${secondary})or(Previous_Role:contains:${secondary})or(Skill_Set:contains:${secondary})or(Candidate_Profile:contains:${secondary})or(Additional_Skills:contains:${secondary})`;
+        let query2=`(Skill_Set:contains:${primary})`;
+        let query3=`(Current_Role:contains:${secondary})or(Previous_Role:contains:${secondary})or(Skill_Set:contains:${secondary})or(Candidate_Profile:contains:${secondary})`;
         let query4=`(Current_Role:contains:${primary})`;
         let query5=`(Previous_Role:contains:${primary})`;
         let query6=`(Candidate_Profile:contains:${primary})`;

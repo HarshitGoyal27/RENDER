@@ -11,7 +11,7 @@ const generateAndStoreAccessToken = async () => {
       `${process.env.REFRESH_TOKEN_URL}refresh_token=${process.env.REFRESH_TOKEN}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=refresh_token`
     );
     const accessToken = resp.data.access_token;
-    console.log(accessToken)
+    console.log(accessToken);
     if (accessToken) {
       myCache.set('accessToken', accessToken, 57 * 60 * 1000); // Store token for 10 minutes
     } else {

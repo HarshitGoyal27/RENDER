@@ -32,7 +32,7 @@ const addClientCandidatesZoho=async(res,data,url)=>{//direcxt add client with ca
         console.log(successRes.data.data[0].details);
         return successResponse({ res, data: "Clients Candidates added Succesfully", message: "Success" });
     }catch(err){
-        console.log(err)
+        console.log('Not added',err)
         return errorResponse({res,err})
     }
 }

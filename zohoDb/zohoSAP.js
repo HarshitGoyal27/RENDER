@@ -133,14 +133,14 @@ const getSAPZoho = async (req, res, urls) => {
       const candidatesRelevantFields=findRelevantFields(finalArray);
       console.log('Total Candidates after relevant fields:=>',candidatesRelevantFields.length);
 
-      let filteredCandidates=filterCandidates(candidatesRelevantFields,req.body.profiles);
+      const filteredCandidates=filterCandidates(candidatesRelevantFields,req.body.profiles);
       console.log('Total Candidates after All the fields:=>',filteredCandidates.length);
 
       const unique=removeDuplicates(filteredCandidates);
 
       const sorted=sortedCandidates(unique,req.body.profiles,[],[]);
 
-      let finalCandidates=sorted;
+      const finalCandidates=sorted;
       console.log('SAP CANDIDATES:->',finalCandidates.length);
 
       return successResponse({

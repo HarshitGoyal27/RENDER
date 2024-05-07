@@ -51,7 +51,7 @@ async function fetchCandidatesForSkill(skill,profiles) {
         Authorization: `Zoho-oauthtoken ${accessToken}`,
       },
       params:{
-        per_page:200
+        per_page:10//change here
       }
     });
     candidatesData=findRelevantFields(candidatesData.data.data,profiles);
@@ -105,6 +105,7 @@ async function getCandidatesForExpression(expression,profiles) {
   }
   expression=expression.replace(/\|/g,"||");
   expression=expression.replace(/\&/,"&&");
+  console.log(expression);
   const skillResults = await Promise.all(skill_stack.map((skill)=>{
     let data=fetchCandidatesForSkill(skill,profiles);
     return data;

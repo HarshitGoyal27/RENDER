@@ -51,7 +51,7 @@ async function fetchCandidatesForSkill(skill,profiles) {
         Authorization: `Zoho-oauthtoken ${accessToken}`,
       },
       params:{
-        per_page:10//change here
+        per_page:200//change here
       }
     });
     candidatesData=findRelevantFields(candidatesData.data.data,profiles);

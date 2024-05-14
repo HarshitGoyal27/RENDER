@@ -38,6 +38,3 @@ const addClientCandidatesData=async(req,res)=>{
     }
 }
 module.exports={addClientsData,addClientCandidatesData}
-
-//1000.4a11234254ca96f7823495e564562738.22bdb9fa1d180094e0d919585467c889
-//1000.41a34d8edab5672d0081e39abb583de6.fbd17469124f7c5a215093d6b4e49d07

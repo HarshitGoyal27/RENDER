@@ -10,12 +10,12 @@ const checkClientAddedOrNot=async(data)=>{
     try{
         const accessToken = getAccessToken();
         const phone=data[0].Contact_Number;
-        const email=data[0].Work_Email;
-        const successRes=await axios.get(`https://recruit.zoho.in/recruit/v2/Clients/search?criteria=(Contact_Number:contains:${phone})and(Work_Email:contains:${email})`,{
+        const email=data[0].Email;
+        const successRes=await axios.get(`https://recruit.zoho.in/recruit/v2/Clients/search?criteria=(Email:contains:${email})`,{
             headers:{
                 Authorization: `Zoho-oauthtoken ${accessToken}`,
             }
-        })
+        });
         if(successRes.data){
             console.log('Data is already present',successRes.data.info)
             return successRes.data.data[0].id;
@@ -57,6 +57,7 @@ const addClientCandidatesZoho=async(res,data,url)=>{//direcxt add client with ca
                 }
             });
             console.log('Client modified',successRes.data.data[0].details);
+            let jobId=await addJobOpening(data,true);//client and contact
             return successResponse({ res, data: "Clients Candidates added Succesfully", message: "Success" });
         }else{
             const successRes=await axios.post(url,{data},{
@@ -66,8 +67,7 @@ const addClientCandidatesZoho=async(res,data,url)=>{//direcxt add client with ca
             });
             console.log('Client added',successRes.data.data[0].details);
             let contact=await addContact(data);
-            let jobId=await addJobOpening(data);
-            let submitClient=await submmitToClient(jobId,data,successRes.data.data[0].details.id,contact);
+            let jobId=await addJobOpening(data,false);
             return successResponse({ res, data: "Clients Candidates added Succesfully", message: "Success" });
         }
     }catch(err){
@@ -76,12 +76,15 @@ const addClientCandidatesZoho=async(res,data,url)=>{//direcxt add client with ca
     }
 }
 
-const addJobOpening=async(client)=>{
+const addJobOpening=async(client,flag)=>{
+    console.log('abc',client);
     let obj={};
-    obj.Job_Opening_Name=client[0].Client_Name+'Test';
+    obj.Job_Opening_Name=client[0].Client_Job_Name;
     obj.Client_Name=client[0].Client_Name;
     obj.Target_Date=client[0].Call_Schedule.substring(0,10);
     obj.Industry='Technology';
+    obj.Number_of_Positions=client[0].Number_of_Positions;
+    obj.Job_Description=client[0].Job_Description;
     let arr=[];
     arr.push(obj);
     try{
@@ -104,7 +107,7 @@ const addContact=async(client)=>{
     let obj={};
     obj.Client_Name=client[0].Client_Name;
     obj.Email=client[0].Work_Email;
-    obj.Last_Name='Test123ABC';
+    obj.Last_Name=client[0].Client_Name;
     obj.Work_Phone=client[0].Contact_Number;
     let arr=[];
     arr.push(obj);
@@ -141,7 +144,7 @@ const associateCandidates=async(jobid,client)=>{
         console.log('Client Associated Sucessfuly',successRes.data.data[0].details);
         return true;
     }catch(err){
-        console.log('Client Not Associated');
+        console.log('Client Not Associated',err);
         return true;
     }
 }

@@ -19,17 +19,17 @@ const addClientCandidatesData=async(req,res)=>{
         const obj={};
         const client=req.body.ClientData;
         const clientCandidates=req.body.selectedId;
-        obj.Client_Name=client.Name;
-        obj.Email=client.Email;
-        obj.Company=client.Company_name;
-        obj.Contact_Number=client.contact_number;
-        obj.Work_Email=client.workEmail;
-        obj.Call_Schedule=client.meetingDate;
-        obj.Work_Type=client.workType;
-        obj.Experience=client.yearOfExp+'';
-        obj.Current_Timezone=client.Current_Timezone
-        if(client.Skills.length>0)obj.Skills=client.Skills.join(",");
+        obj.Client_Name=client.Name;//required
+        obj.Email=client.Email;//required
+        obj.Company=client.Company_name;//required
+        obj.Contact_Number=client.contact_number;//required
+        obj.Call_Schedule=client.meetingDate;//required
+        obj.Current_Timezone=client.Current_Timezone;//required
+        obj.Client_Job_Name=client.Designation;//required
         obj.Candidates=clientCandidates.join(',');
+        obj.Number_of_Positions=client.Openings;
+        obj.Job_Description=client.Job_Description;
+        console.log(obj);
         const successResponse=await addClientCandidatesZoho(res,[obj],API_CLIENT);
         return successResponse;
     }catch(err){

@@ -69,7 +69,7 @@ async function filterCandidates(candidates,expression) {
       //array of object
       let arr=candidates[i];
       for(let i=0;i<arr.length;i++){
-        let skill=arr[i].Skills;
+        let skill=arr[i].Skills.toLowerCase();
         let temp=skill.toLowerCase();
         if(eval(expression)){
           ans.push(arr[i]);

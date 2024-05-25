@@ -23,7 +23,7 @@ const addClientCandidatesData=async(req,res)=>{
         obj.Email=client.Email;//required
         obj.Company=client.Company_name;//required
         obj.Contact_Number=client.contact_number;//required
-        obj.Call_Schedule=client.meetingDate;//required
+        if(obj.Call_Schedule)obj.Call_Schedule=client.meetingDate;//required
         obj.Current_Timezone=client.Current_Timezone;//required
         obj.Client_Job_Name=client.Designation;//required
         obj.Candidates=clientCandidates.join(',');

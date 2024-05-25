@@ -1,6 +1,7 @@
 const axios=require("axios");
+const fs=require("fs");
 let url="https://recruit.zoho.in/recruit/v2/Candidates/search";
-const accessToken="1000.28e6fb8434952507c489f1eb614e1a34.aab7578779b452454e607758231d5c54";
+const accessToken="1000.0d735e3e0b3bdbe77eabc1542858fe15.2c194502947ac0b940afdf09450ef57e";
 let test=async(url)=>{
     try{
         let resp=await axios.get(`${url}`,{
@@ -8,18 +9,19 @@ let test=async(url)=>{
                 Authorization: `Zoho-oauthtoken ${accessToken}`,
             },
             params:{
-                per_page:200,
-                page:2
+                per_page:5,
+                page:1
             }
         });
         console.log('QUERY HIT',resp.data.info);
+        fs.writeFileSync("./testZoho.json",JSON.stringify(resp.data.data))
         //return resp.data.data;
     }catch(err){
         console.log(err);
     }
 }
 
-const query=`${url}?criteria=${encodeURIComponent("Current_Role:contains:TM")}`;
+const query=`${url}?criteria=(Current_Role:contains:EWM)and(Current_Role:contains:ABAP)or(Current_Role:contains:FICO)`;
 test(query);
 
 

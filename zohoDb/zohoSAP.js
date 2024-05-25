@@ -6,6 +6,7 @@ const {
 const axios = require("axios");
 const { getAccessToken } = require("../accessToken");
 const {sortedCandidates}=require("./sortCandidates.js");
+
 const findRelevantFields = (C_data) => {
     try{
       let arr = [];
@@ -58,8 +59,34 @@ const fetchData = async (url,pageNumber) => {
 
 const filterCandidates=(candidates, obj)=>{
     try{
-        let priorityArray=[obj.keyword,obj.primary_module,obj.secondary_module];
+        let priorityArray=[];
+        priorityArray[0]=obj.primary_module?obj.primary_module:"";
+        priorityArray[1]=obj.secondary_module?obj.secondary_module:"";
+        priorityArray[2]=obj.role_type?obj.role_type:"";
+        priorityArray[3]=obj.Skill_Set?obj.Skill_Set:"";
+        priorityArray[4]=obj.project_type?obj.project_type:"";
+        priorityArray[5]=obj.position_type?obj.position_type:"";
+        priorityArray[6]=obj.HANAECC?obj.HANAECC:"";
+        priorityArray[7]=obj.Certified?"certified":"";
         let arr=[];
+        let regexArray=[];
+        for(let i=0;i<priorityArray.length;i++){
+          if(priorityArray[i]){
+            let word=priorityArray[i];
+            if(word==='Functional' || word==='Techno-Functional'){
+              word='Consultant';
+            }
+            else if(word==='Technical'){
+              word='6 DIFF KEYWORDS FOR ROLE TYPE CHECK';
+              regexArray.push(word);
+              continue;
+            }
+            let reg=new RegExp(`\\b${word}\\b`,'ig');
+            regexArray.push(reg);
+          }
+        }
+        let RegLen=regexArray.length;
+        console.log(regexArray);
         candidates.forEach((ele)=>{
             let skill = ele.Skills.toLowerCase();
             let MayAlsoKnow = ele.MayAlsoKnow?ele.MayAlsoKnow.toLowerCase():'';
@@ -67,33 +94,51 @@ const filterCandidates=(candidates, obj)=>{
             let CurrentRole=ele.CurrentRole?ele.CurrentRole.toLowerCase():'';
             let PreviousRole=ele.PreviousRole?ele.PreviousRole.toLowerCase():'';
             let str=skill + ' , ' + MayAlsoKnow + ' , ' + CandidateProfile + ' , ' + CurrentRole + ' , ' + PreviousRole;
-            let keyword=priorityArray[0].toLowerCase();
-            let primary=priorityArray[1] && priorityArray[1].toLowerCase();
-            let secondary=priorityArray[2] && priorityArray[2].toLowerCase();
-            let primary_regex=new RegExp(`\\b${primary}\\b`,'ig');
-            let secondary_regex=new RegExp(`\\b${secondary}\\b`,'ig');
-            if(str.includes(keyword)){
-                if(primary && secondary){
-                    if(primary_regex.test(str) && secondary_regex.test(str)){
-                        arr.push(ele);
-                    }
-                }else if(primary){
-                    if(primary_regex.test(str)){
-                        arr.push(ele);
-                    }
-                }else if(secondary){
-                    if(secondary_regex.test(str)){
-                        arr.push(ele);
-                    }
-                }else{
-                    arr.push(ele);
+            let cnt=0;
+            for(let i=0;i<RegLen;i++){
+              let regex=regexArray[i];
+              if(regex==='6 DIFF KEYWORDS FOR ROLE TYPE CHECK'){
+                if(str.includes("developer") || str.includes("engineer") || str.includes("architect")){
+                  cnt++; 
                 }
+              }
+              else if(regex.test(str)){
+                cnt++;
+              }
+            }    
+            if(cnt===RegLen){
+              arr.push(ele);
             }
         })
+        console.log('Length',arr.length);
         return arr;
     }catch(err){
         console.log(err);
     }
+}
+
+function booleanFun(candidates,expression) {
+  try{
+    let ans=[];
+    console.log(expression,candidates.length);
+    for(let i=0;i<candidates.length;i++){
+      //array of object
+      let arr=candidates[i];
+      let skill = arr.Skills.toLowerCase();
+      let MayAlsoKnow = arr.MayAlsoKnow?arr.MayAlsoKnow.toLowerCase():'';
+      let CandidateProfile=arr.CandidateProfile?arr.CandidateProfile.toLowerCase():'';
+      let CurrentRole=arr.CurrentRole?arr.CurrentRole.toLowerCase():'';
+      let PreviousRole=arr.PreviousRole?arr.PreviousRole.toLowerCase():'';
+      let temp=skill + ' , ' + MayAlsoKnow + ' , ' + CandidateProfile + ' , ' + CurrentRole + ' , ' + PreviousRole;
+      if(eval(expression)){
+        ans.push(arr);
+      }
+    }
+    return ans;
+  }catch(err){
+    console.log('err');
+  }
+
 }
 
 const removeDuplicates=(candidates)=>{
@@ -112,7 +157,7 @@ const removeDuplicates=(candidates)=>{
     return uniqueCandidates;
 }
 
-const getSAPZoho = async (req, res, urls) => {
+const getSAPZoho = async (req, res, urls, expression) => {
     try {
       let pageNumber=req.body.pageNoAxios;
 
@@ -133,14 +178,17 @@ const getSAPZoho = async (req, res, urls) => {
       const candidatesRelevantFields=findRelevantFields(finalArray);
       console.log('Total Candidates after relevant fields:=>',candidatesRelevantFields.length);
 
-      const filteredCandidates=filterCandidates(candidatesRelevantFields,req.body.profiles);
+      const booleanCandidates=booleanFun(candidatesRelevantFields,expression);
+      console.log('Total Candidates after boolean fields:=>',booleanCandidates.length,expression);
+
+      const filteredCandidates=filterCandidates(booleanCandidates,req.body.profiles);
       console.log('Total Candidates after All the fields:=>',filteredCandidates.length);
 
       const unique=removeDuplicates(filteredCandidates);
 
-      const sorted=sortedCandidates(unique,req.body.profiles,[],[]);
+      // const sorted=sortedCandidates(unique,req.body.profiles,[],[]);
 
-      const finalCandidates=sorted;
+      const finalCandidates=unique;
       console.log('SAP CANDIDATES:->',finalCandidates.length);
 
       return successResponse({

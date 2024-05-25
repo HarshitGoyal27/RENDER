@@ -44,7 +44,7 @@ const getSAPData=async(req,res)=>{
         let primary=req.body.profiles.primary_module;
         let secondary=req.body.profiles.secondary_module;
         let roleType=req.body.profiles.role_type;
-        let skills=req.body.profiles.Skill_Set;
+        let skills=req.body.profiles.technical_skills;
         let projectType=req.body.profiles.project_type;
         let positionType=req.body.profiles.position_type;
         let hana_ecc=req.body.profiles.HANAECC;

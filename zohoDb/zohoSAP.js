@@ -63,7 +63,7 @@ const filterCandidates=(candidates, obj)=>{
         priorityArray[0]=obj.primary_module?obj.primary_module:"";
         priorityArray[1]=obj.secondary_module?obj.secondary_module:"";
         priorityArray[2]=obj.role_type?obj.role_type:"";
-        priorityArray[3]=obj.Skill_Set?obj.Skill_Set:"";
+        priorityArray[3]=obj.technical_skills?obj.technical_skills:"";
         priorityArray[4]=obj.project_type?obj.project_type:"";
         priorityArray[5]=obj.position_type?obj.position_type:"";
         priorityArray[6]=obj.HANAECC?obj.HANAECC:"";

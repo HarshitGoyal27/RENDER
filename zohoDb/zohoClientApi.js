@@ -81,7 +81,7 @@ const addJobOpening=async(client,flag)=>{
     let obj={};
     obj.Job_Opening_Name=client[0].Client_Job_Name;
     obj.Client_Name=client[0].Client_Name;
-    obj.Target_Date=client[0].Call_Schedule.substring(0,10);
+    if(client[0].Call_Schedule)obj.Target_Date=client[0].Call_Schedule.substring(0,10);
     obj.Industry='Technology';
     obj.Number_of_Positions=client[0].Number_of_Positions;
     obj.Job_Description=client[0].Job_Description;

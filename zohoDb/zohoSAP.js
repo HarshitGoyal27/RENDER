@@ -160,16 +160,14 @@ const removeDuplicates=(candidates)=>{
 const getSAPZoho = async (req, res, urls, expression) => {
     try {
       let pageNumber=req.body.pageNoAxios;
-
       const responses = await Promise.all(urls.map(url => fetchData(url,pageNumber)));
-
       let finalArray=[];
       responses.forEach((arr)=>{
         if(arr){
             finalArray.push(...arr);
         }
         else{
-          console.log("Error encountered");
+          console.log("Error encountered123456");
         }
       });
 

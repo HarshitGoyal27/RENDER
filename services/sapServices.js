@@ -9,9 +9,10 @@ const {
     API_URL_GET,
     API_URL_GET_TABULAR_OLD
   } = require("../utils/constants/constants");
+  
 const getSAPData=async(req,res)=>{
     try{
-        console.log(req.body);
+        console.log(req.body,"ABCDEFGHARSHITGOYAL");
         let keyword=req.body.profiles.keyword;
         keyword=keyword.replace(/\"/g,'');
         keyword=keyword.replace(/ and /ig,' & ');

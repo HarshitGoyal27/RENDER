@@ -1,7 +1,7 @@
 const axios=require("axios");
 const fs=require("fs");
 let url="https://recruit.zoho.in/recruit/v2/Candidates/search";
-const accessToken="1000.0d735e3e0b3bdbe77eabc1542858fe15.2c194502947ac0b940afdf09450ef57e";
+const accessToken="1000.012e399e8f8c22d50d5f9460aab59b9c.26cee442859674147537cb24b2a4872e";
 let test=async(url)=>{
     try{
         let resp=await axios.get(`${url}`,{
@@ -21,9 +21,40 @@ let test=async(url)=>{
     }
 }
 
-const query=`${url}?criteria=(Current_Role:contains:EWM)and(Current_Role:contains:ABAP)or(Current_Role:contains:FICO)`;
-test(query);
+//const query=`${url}?criteria=(Current_Role:contains:EWM)and(Current_Role:contains:ABAP)or(Current_Role:contains:FICO)`;
+//test(query);
 
+
+function encodeFileToBase64(filePath) {
+    const file = fs.readFileSync(filePath);
+    return Buffer.from(file).toString('base64');
+  }
+  
+  async function addDocument(filePath, accessToken) {
+    try {
+      const base64EncodedResume = encodeFileToBase64(filePath);
+      const filename = filePath.split('/').pop(); // Extract filename from path
+  
+      const data = {
+        "filename": filename,
+        "document": base64EncodedResume
+      };
+  
+      const headers = {
+        "Authorization": `Zoho-oauthtoken ${accessToken}`,
+        "Content-Type":"multipart/form-data"
+      };
+  
+      const response = await axios.post("https://recruit.zoho.in/recruit/v2/Candidates/actions/import_document", data, { headers });
+      console.log("API Response:", response.data);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  }
+  
+  
+  const filePath = "./resume.docx";
+  addDocument(filePath, accessToken);
 
 // let keyword='SAP';
 // let primary="TM";

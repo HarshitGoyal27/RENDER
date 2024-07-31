@@ -184,9 +184,9 @@ const getSAPZoho = async (req, res, urls, expression) => {
 
       const unique=removeDuplicates(filteredCandidates);
 
-      // const sorted=sortedCandidates(unique,req.body.profiles,[],[]);
+      const sorted=sortedCandidates(unique,req.body.profiles,[],[]);
 
-      const finalCandidates=unique;
+      const finalCandidates=sorted;
       console.log('SAP CANDIDATES:->',finalCandidates.length);
 
       return successResponse({
